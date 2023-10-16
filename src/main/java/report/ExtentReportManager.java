@@ -7,19 +7,25 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import static report.Setup.extentReports;
+public class ExtentReportManager {
 
-public class ExtentReportManag {
-    public static ExtentReports createInstance(String fileName, String reportName, String documentTitle) {
-        ExtentSparkReporter extentSparkReporter = new ExtentSparkReporter(fileName);
-        extentSparkReporter.config().setReportName(reportName);
-        extentSparkReporter.config().setDocumentTitle(documentTitle);
-        extentSparkReporter.config().setTheme(Theme.DARK);
-        extentSparkReporter.config().setEncoding("utf-8");
-        extentReports = new ExtentReports();
-        extentReports.attachReporter(extentSparkReporter);
-        return extentReports;
+    public static ExtentReports createExtentReport(String filePath) {
+        ExtentSparkReporter sparkReports = new ExtentSparkReporter(filePath);
+        sparkReports.config().setReportName("Sample Extent Report");
+
+        ExtentReports reports = new ExtentReports();
+        reports.attachReporter(sparkReports);
+
+        reports.setSystemInfo("Machine:", "TESTMC1");
+        reports.setSystemInfo("OS", "WIN 11");
+        reports.setSystemInfo("Blog Name", "REST ASSURED FRAMEWORK");
+        reports.setSystemInfo("Author", "Chetan");
+
+        sparkReports.config().setTheme(Theme.DARK);
+
+        return reports;
     }
+
 
     public static String getReportNameWithTimeStamp() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
