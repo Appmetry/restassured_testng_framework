@@ -30,22 +30,24 @@ To set up the project, you can use Maven to create a basic project structure:
 ```bash
 mvn archetype:generate -DgroupId=com.yourcompany -DartifactId=api-test-framework -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 ```
-Open the project in your preferred IDE for further development.
+## Open the project in your preferred IDE for further development.
 
-Adding Dependencies
+## Adding Dependencies
 In your pom.xml file, you should add the necessary dependencies for RestAssured, TestNG, and Extent Report. Run mvn clean install to download these dependencies.
 
-Writing API Tests
+## Writing API Tests
 You can write your API tests in Java using RestAssured. We've provided a sample test case in the Writing API Tests section of the blog post.
 
-Generating Extent Reports
+## Generating Extent Reports
 To create HTML reports for your tests, use the Extent Report library. We've included a utility class in the blog post to facilitate report generation.
 
-Running Tests
+## Running Tests
+
 You can run your API tests using Maven:
 ```bash
 mvn clean test
 ```
 
-Viewing Extent Reports
+## Viewing Extent Reports
+
 After running your tests, you can find the Extent Report HTML file in the reports directory. Open it in your browser to view the test results.
