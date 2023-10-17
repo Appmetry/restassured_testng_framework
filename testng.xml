@@ -2,7 +2,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <listeners>
-        <listener class-name="report.Setup"></listener>
+        <listener class-name="report.TestNgListener"></listener>
     </listeners>
     <test verbose="2" preserve-order="true" name="C:/Users/Appmetry/Project/restassured_api">
         <classes>
