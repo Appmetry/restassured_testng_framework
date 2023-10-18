@@ -3,6 +3,7 @@ package api.tests;
 import api.basetest.BaseTest;
 import api.endpoints.BookStoreEndPoints;
 import api.payloads.DataProviders;
+import api.payloads.MapPayload;
 import api.payloads.RequestBodyBuilder;
 import api.utils.RandomDataGenerator;
 import io.restassured.path.json.JsonPath;
@@ -24,6 +25,8 @@ public class ValidateBooks {
     String userName;
     String userId;
     String bookId;
+
+    MapPayload testData = new MapPayload(authToken, userId, bookId);
     RandomDataGenerator data = new RandomDataGenerator();
     private String username = data.generateRandomUsername();
     private String password = data.generateRandomPassword();
@@ -35,6 +38,8 @@ public class ValidateBooks {
         authToken = userMap.get("authToken");
         userName = userMap.get("username");
         userId = userMap.get("userId");
+
+
     }
 
 
@@ -42,24 +47,23 @@ public class ValidateBooks {
     public void validateAllBooks() throws JSONException {
         Response response = BookStoreEndPoints.getAllBooks(authToken);
         Assert.assertEquals(response.getStatusCode(), 200);
-        Assert.assertEquals( response.getHeader("content-type"),"application/json; charset=utf-8");
+        Assert.assertEquals(response.getHeader("content-type"), "application/json; charset=utf-8");
         String jsonString = response.asString();
         JSONAssert.assertEquals(RequestBodyBuilder.allBookAPIResponse, jsonString, true);
 
         List<Map<String, String>> books = JsonPath.from(jsonString).get("books");
         Assert.assertTrue(books.size() > 0);
         bookId = books.get(1).get("isbn");
-      /*  List<Map<String, Object>> bookList = new ArrayList<>();*/
+        /*  List<Map<String, Object>> bookList = new ArrayList<>();*/
 
     }
 
     @Test(priority = 1)
     public void validateAddBook() {
-        System.out.println(userId + "    auth token   " + authToken);
+       // System.out.println("add book api ----> " + userId + "    auth token   " + authToken);
         String requestBody = RequestBodyBuilder.buildAddBookRequestBody(userId, bookId);
-
         Response response = BookStoreEndPoints.addBook(authToken, requestBody);
-        System.out.println(response.getStatusCode() + "  " + response.getHeaders());
+       // System.out.println(response.getStatusCode() + "  " + response.getHeaders());
         Assert.assertEquals(response.getStatusCode(), 201);
         Assert.assertEquals(response.jsonPath().get("books[0].isbn"), bookId);
 
@@ -67,7 +71,8 @@ public class ValidateBooks {
 
     @Test(priority = 2)
     public void validateGetBook() {
-        Response response = BookStoreEndPoints.getBookData(authToken, bookId);
+        Response response = BookStoreEndPoints.getBookData(testData.getHeaders(), bookId);
+        System.out.println("getBook response ---> " + response);
         Assert.assertEquals(response.getStatusCode(), 200);
 
         String[] fields = {"isbn", "title", "subTitle", "author", "website"};
@@ -78,15 +83,16 @@ public class ValidateBooks {
         }
     }
 
-    @Test(dataProvider = "userISBN", dataProviderClass = DataProviders.class, priority = 3)
-    public void updateBook(String user, String ISBN) {
-        String requestBody = "{ \"userId\": \"" + userId + "\", \"isbn\": \"" + ISBN + "\" }";
-     //   System.out.println(requestBody);
-        Response response = BookStoreEndPoints.updateBook(authToken, bookId, requestBody);
-       // System.out.println(response.getBody().asString());
+    @Test(priority = 3)
+    public void updateBook() {
+        MapPayload testData = new MapPayload(authToken, userId, bookId); // Pass the authToken to TestData
+        Map<String, Object> headers = testData.getHeaders();
+        Map<String, Object> pathParams = testData.getPathParams();
+        Map<String, Object> payload = testData.getPayload();
+        Response response = BookStoreEndPoints.updateBook(headers, pathParams, payload);
         Assert.assertEquals(response.getStatusCode(), 200);
         String isbnno = response.jsonPath().get("books[0].isbn");
-        Assert.assertEquals(isbnno, "9781593277574");
+        Assert.assertEquals(isbnno, "9781449325862");
 
     }
 

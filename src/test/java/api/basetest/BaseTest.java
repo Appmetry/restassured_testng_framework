@@ -6,6 +6,7 @@ import org.testng.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
+
 public class BaseTest {
     public static Map<String, String> createUser(String username, String password) {
         String requestBody = "{ \"userName\": \"" + username + "\", \"password\": \"" + password + "\" }";
@@ -22,6 +23,9 @@ public class BaseTest {
         userMap.put("userId", userId);
         userMap.put("authToken", authToken);
         return userMap;
+
     }
+
+
 }
 

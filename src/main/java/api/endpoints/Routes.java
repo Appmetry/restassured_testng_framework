@@ -19,7 +19,6 @@ public class Routes {
     public static String books = bookStoreModule + "/Books";
     public static String book = bookStoreModule + "/Book";
     public static String updateBookDetails = books + "/" + "{ISBN}";
-
     public static String getBook = bookStoreModule + "/Book";
 
 
